@@ -1,0 +1,25 @@
+### check if the user has already a subscription
+    ### if exists test if the current request is not an upgrade
+    ### if is not redirect to the main page
+    ### if is an upgrade modify the sub
+
+    subscription_exists = subscription.objects.filter(
+        profile = the_profile, 
+        service=the_service,
+    )
+    ### if subscription exists test if is not an upgrade
+    if subscription_exists:
+        existent_subscription = subscription_exists[0]
+        ### type of the existing sub
+        exitent_is_life = True if existent_subscription.price.price_type=="l" else False
+        exitent_is_monthly = True if existent_subscription.price.price_type=="m" else False
+        exitent_is_annual = True if existent_subscription.price.price_type=="a" else False
+        type_req_sub = the_profile.price_type ## the type of the requested subscription
+        ### test if the current request is an upgrade of the existent subscription;
+        is_upgrade = True if (
+                                not exitent_is_life or not (exitent_is_annual and type_req_sub == ('m' or 'a')) or
+                                not (exitent_is_monthly and type_req_sub== 'm')
+                            ) else False
+        if not is_upgrade:
+            return redirect(reverse('Goals'))
+    ## if above false create a new subscription

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+    {% block content %}
+    <div class="container">
+        <h1 class="text-center text-light mt-2"> {{goal.title}} </h1>
+        <div class="row">
+            <div class="col-6">
+                <a class="text-info text-decoration-none" href="{% url 'editGoal' goal_id=goal.id %}"> Edit </a>
+            </div>
+            <div class="col-6">
+                <a class="text-danger text-decoration-none" href="{% url 'goalDelete' goal_id=goal.id %}"> Delete</a>
+            </div>
+        </div>
+        
+        <div class="row mt-2 ">
+            <div class="col-12 text-center mt-4 mb-4 ">
+                <h3 class="fw-bold fst-italic text-light">"{{goal.description}}"</h3>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-6 bg-success text-light rounded-2 pr-2">
+                <div class="row ">
+                    <div class="col-12 ">
+                        <p class="text-center mt-2">Start Date</p>
+                    </div>
+                    <div class="col-12">
+                        <p class="text-center fw-bold">{{goal.start_date}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 bg-danger text-light rounded-2">
+                <div class="row">
+                    <div class="col-12 ">
+                        <p class="text-center mt-2">Start Date</p>
+                    </div>
+                    <div class="col-12">
+                        <p class="text-center fw-bold">{{goal.end_date}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-6"> 
+                <a class="btn btn-info" href="{% url 'goals' %}">Back to Goal</a>
+            </div>
+            <div class="col-6"> 
+                <a class="btn btn-warning" href="{% url 'addTask' goal_id=goal.id %}">Add Task</a>
+            </div>
+            
+        </div>
+        {% for task in tasks %}
+        <div class="row mb-4">
+            <div class="col-11 text-center">
+                <div class="card {% if task.done %} bg-success {% else %} bg-warning {% endif %} shadow-lg">
+                    <div class="card-body ">
+                        <h3>{{task.content}}</h3> 
+                    </div>
+                </div>
+            </div>
+            <div class="col-1 bg-dark rounded-2">
+                <div class="row">
+                    {% if task.done %}
+                    <div class="col-12 mt-2 "><a class="pl-2 text-warning text-decoration-none" href="{% url 'updateTask' task_id=task.id status='undone' %}">Undo</a></div>
+                    {% else %}
+                    <div class="col-12 mt-2"><a class="text-success text-decoration-none" href="{% url 'updateTask' task_id=task.id status='done' %}">Done</a></div>
+                    {% endif %}
+                    <div class="col-12 mt-1"><a class="text-info text-decoration-none" href="{% url 'editTask' task_id=task.id %}">Edit</a></div>
+                    <div class="col-12 mt-1 mb-2"><a class="text-danger text-decoration-none" href="{% url 'updateTask' task_id=task.id status='delete' %}">Delete</a></div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

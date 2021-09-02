@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load progress %}
+    {% block content %}
+    <div style="position:absolute; bottom:10vh; right:10vw; background-color:yellow; border-radius:50%;"><a href="{% url 'goalAdd'%}" class="text-decoration-none text-reset">Add</a></div>
+        <div class="container mt-5">
+            <div class="row">
+                {% for goal in goals %}
+                <div class="col-sm-12 col-lg-3 mb-2 ">
+                    <div class="card bg-success">
+                        <div class="card-body">
+                            <div class="card-title fw-bold">
+                                <div class="row">
+                                    {% with goal.task_set.all as tasks %}
+                                    <div class="col-1">
+                                        <i class="fas fa-star {% if tasks|progress == '100.0'  %} text-warning {% endif %}"></i>
+                                    </div>
+                                    <div class="col-6 ">
+                                        <a href="{% url 'goalDetails' goal.id %} "class="text-decoration-none text-light text-truncate">{{goal.title}}</a>
+                                    </div>
+                                    <div class="col-4">
+                                           {{tasks|progress}} %
+                                    </div>
+                                    {% endwith %}
+                                </div>
+                                
+                            </div>
+                            <p class="card-text text-warning">{{goal.description}}</p>
+                            <small class="text-warning">Total tasks: {{goal.task_set.all|length}}</small>
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <a href="{% url 'goalDelete' goal.id %}" class="link-dark text-decoration-none">Delete</a>
+                                </div>
+                                <div class="col-6">
+                                    <a href="{% url 'editGoal' goal_id=goal.id %}" class="link-info text-decoration-none">Edit</a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                {% endfor%}
+            </div>
+            {% if not request.user.is_authenticated %}
+            <h3 class="mt-5 text-center text-light"> <a href="{% url 'account_signup' %}">Sign up</a> to save the progress!</h3>
+            {% endif %}
+            {% if not "Goals" in request.session.active_services %}
+            <h3 class="mt-5 text-center text-light">Activate a subscription <a href="{% url 'profile' %}">here</a> to get access to this service.</h3>
+            {% endif %}
+        </div>    
+    {% endblock %}

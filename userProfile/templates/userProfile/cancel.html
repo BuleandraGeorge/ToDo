@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1 class="mt-2">Success</h1>
+    {% if now %}
+    <p>Subscription <strong>{{sub.service.name}}  {{sub.price.get_price_type_display}}</strong>  has been cancel with success</p>
+    {% else %}
+    <p>Subscription <strong>{{sub.service.name}}  {{sub.price.get_price_type_display}}</strong>  will be cancelled at the end of the period</p>
+    {% endif %}
+{% endblock %}
+</div>

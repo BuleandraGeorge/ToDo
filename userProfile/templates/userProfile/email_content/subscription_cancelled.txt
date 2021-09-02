@@ -1,0 +1,11 @@
+Hello, the achiever!!
+
+We want to inform you that {{service_name}} {{period}} subscription was cancelled.
+
+This happend due to:
+- you have choosen to
+- after many failed payment requests the subscription has been cancelled automatically
+
+Thank you, from "The Achiever" team.
+
+Good luck!

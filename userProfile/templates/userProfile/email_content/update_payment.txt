@@ -1,0 +1,9 @@
+Hello, the achiever!!
+
+We want to inform you that {{service_name}} {{period}} subscription will end soon.
+
+To continue to use the services enter on your profile page and at Cards section add a card for next payments.
+
+Thank you, from "The Achiever" team.
+
+Good luck!

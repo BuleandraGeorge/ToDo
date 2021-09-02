@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container ">
+    <h1 class="text-center mt-3 mb-5">What's your might goal for today?</h1>
+    <form method="POST" action="{% url 'editGoal' goal_id=goal.id %}">
+        {% csrf_token %}
+        <div class="card text-light">
+            <div class="card-body bg-success">
+                <h2 class="card-title text-center">Name the goal</h2>
+                <h2 class="card title">{{goalform.title}}</h2>
+                <div class="card-body">
+                    <h4>Describe the goal</h4>
+                    <p>{{goalform.description}}</p>
+                    <div class="row">
+                        <div class="col-6">
+                            <h4>Set a start date</h4>
+                            <p>{{goalform.start_date}}</p>
+                        </div>
+                        <div class="col-6">
+                            <h4>Set a dealine</h4>
+                            <p>{{goalform.end_date}}</p>
+                        </div>
+                    </div>     
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-warning mt-2 mb-2" type="submit">Update</button>
+    </form>
+</div>
+    
+{% endblock %}

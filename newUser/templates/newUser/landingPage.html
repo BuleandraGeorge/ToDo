@@ -1,0 +1,114 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<div class="container">
+    <div id="landing-staff" style="">
+        <h1 class="text-center text-light fst-italic" style="font-size:4rem; margin-top:2rem"> THE ACHIEVER </h1>
+        <div class="row pt-5" >
+            <div class="col-2 pt-5">
+                <i class="fas fa-star text-warning" style="font-size:144px"></i>
+            </div>
+            <div class="col-10">
+                <div class="card p-3 bg-success">
+                    <div class="card-body">
+                        <h5 class="card-title text-white fst-italic fw-light" style="font-size:4rem"> 
+                            ”Life without a goal is like a race without a finish line, you're running nowhere.” 
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center" style="margin-top: 5rem;">
+            <div class="col-2">
+                <a class="btn btn-danger fw-bold rounded-0 text-dark" onclick="landing()">Let's begin</a>
+            </div>
+        </div>
+    </div>
+    <form action="{% url 'newUser' %}" method="POST" id="new-user">
+        {% csrf_token %}
+        <div id="title" style="display:none; margin-top: 2rem;">
+            <div class="card bg-success">
+                <div class="card-body" style="height:70vh">
+                    <h1 class="card-title text-center mx-5 mt-5 text-light" style="margin-bottom: 45vh;">
+                        Choose a name that will say everyting for your Goal
+                    </h1>
+                    <div class="w-100 px-auto">{{goalForm.title}}</div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-5 ">
+                <div class="col-1">
+                    <a class="btn btn-danger" onclick="goalTitle()">SET</a>
+                </div>
+            </div>
+        </div>
+        <div id="description" style="display:none; margin-top: 2rem;">
+            <div class="card bg-success">
+                <div class="card-body" style="height:70vh">
+                    <h1 class="card-title text-center mx-5 mt-5 text-light" style="margin-bottom: 10vh;">
+                        Describe in few words the porpouse of the goal
+                    </h1>
+                    <div class="w-100 px-auto">{{goalForm.description}}</div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-5 ">
+                <div class="col-2 ">
+                    <a class="btn btn-danger mx-auto" onclick="goalDescription()">Next</a>
+                </div>
+            </div>
+        </div>
+        <div id="task" style="display:none; margin-top: 2rem;">
+            <div class="card bg-success">
+                <div class="card-body" style="height:70vh">
+                    <h1 class="card-title text-center mx-5 mt-5 text-light" style="margin-bottom: 3vh;">
+                        What’s the very first thing you want to do to accomplish this goal?
+                    </h1>
+                    <div class="w-100 px-auto">{{taskForm.content}}</div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-5 ">
+                <div class="col-2 ">
+                    <a class="btn btn-danger mx-auto" onclick="goalTask()">Let's set a dead-line</a>
+                </div>
+            </div>
+        </div>
+        <div id="dead-line" style="display:none; margin-top: 2rem;">
+            <div class="card bg-success">
+                <div class="card-body" style="height:70vh">
+                    <h1 class="card-title text-center mx-5 mt-5 text-light" style="margin-bottom: 40vh;">
+                        One day.... Which one?
+                    </h1>
+                    <div class="w-100 px-auto">Start date {{goalForm.start_date}}</div>
+                    <div class="w-100 px-auto">Dead line{{goalForm.end_date}}</div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-5 ">
+                <div class="col-1 ">
+                    <button class="btn btn-danger" type="submit" form="new-user">GO!</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function landing()
+    {
+        $("#landing-staff").css("display", "none");
+        $("#title").css("display", "initial");
+    };
+    function goalTitle()
+    {
+        $("#title").css("display", "none");
+        $("#description").css("display", "initial");
+    };
+    function goalDescription()
+    {
+        $("#description").css("display", "none");
+        $("#task").css("display", "initial");
+    };
+    function goalTask()
+    {
+        $("#task").css("display", "none");
+        $("#dead-line").css("display", "initial");
+    };
+</script>
+{% endblock  %}

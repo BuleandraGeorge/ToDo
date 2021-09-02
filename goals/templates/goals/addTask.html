@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container ">
+    <h1 class="text-center text-light mt-2"> {{goal.title}} </h1>
+    <div class="row mt-2 ">
+        <div class="col-12 text-center mt-4 mb-4 ">
+            <h3 class="fw-bold fst-italic text-light">"{{goal.description}}"</h3>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-6 bg-success text-light rounded-2">
+            <div class="row ">
+                <div class="col-12">
+                    <p class="text-center mt-2">Start Date</p>
+                </div>
+                <div class="col-12">
+                    <p class="text-center fw-bold">{{goal.start_date}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 bg-danger text-light rounded-2">
+            <div class="row">
+                <div class="col-12 ">
+                    <p class="text-center mt-2">Start Date</p>
+                </div>
+                <div class="col-12">
+                    <p class="text-center fw-bold">{{goal.end_date}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        <form method="POST" action="{% url 'addTask' goal_id=goal.id %}" >
+            {% csrf_token %}
+            <div class="card shadow-lg mb-2 border-success bg-warning">
+                <div class="card-body">
+                    <h1 class="card-title text-center">Task Description</h1>
+                    <p>{{taskform.content}}</p>
+                    <button class="btn btn-dark" type="submit">Add</button>
+                        <a class="btn btn-info" href="{% url 'goalDetails' goal.id %}">Back to Goal</a>
+                </div>
+            </div>   
+        </form>
+        {% for task in tasks %}
+        <div class="row mb-2">
+            <div class="col-12 text-center">
+                <div class="card shadow-lg {% if task.done %} bg-success {% else %} bg-warning {% endif %}" >
+                    <div class="card-body">
+                        <p>{{task.content}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+    
+{% endblock %}

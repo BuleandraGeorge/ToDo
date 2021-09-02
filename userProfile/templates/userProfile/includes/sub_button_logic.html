@@ -1,0 +1,67 @@
+{% if not active_subscriptions %}
+    <form action="{% url 'checkout' %}" method="POST">
+    {% csrf_token %}
+        <input type="hidden" value="{{price.id}}" name="price_id">
+        <button class="btn btn-warning w-100">Select</button>
+    </form>
+{% else %}
+    {% for sub in active_subscriptions %}
+        {% if sub.service.name == service.name %}
+            {% if sub.price.price_type == 'm' %}
+                {% if price.price_type != 'm' %}
+                    {% if sub.end_date <= timenow %}
+                    <form action="{% url 'reactivate_sub' %}" method="POST">
+                    {% csrf_token %}
+                        <input type="hidden" value="{{price.id}}" name="price_id">
+                        <input type="hidden" value="{{sub.id}}" name="sub_id">
+                        <button class="btn btn-info w-100">Reactivate and Update</button>
+                    </form>
+                    {% else %}
+                    <form action="{% url 'update_sub' %}" method="POST">
+                    {% csrf_token %}
+                        <input type="hidden" value="{{price.id}}" name="price_id">
+                        <input type="hidden" value="{{sub.id}}" name="sub_id">
+                        <button class="btn btn-info w-100">Update</button>
+                    </form>
+                    {% endif %}
+                {% elif sub.end_date <= timenow %}
+                    <form action="{% url 'reactivate_sub' %}" method="POST">
+                        {% csrf_token %}
+                            <input type="hidden" value="{{sub.id}}" name="sub_id">  
+                            <input type="hidden" value="{{price.id}}" name="price_id">
+                            <button class="btn btn-info w-100">Reactivate</button>
+                    </form>
+                {% elif sub.end_date >= timenow %}
+                    <button class="btn btn-info w-100">Active</button>
+                {% endif %}
+            {% elif sub.price.price_type == 'a' %}
+                {% if price.price_type == 'l'%}
+                    <form action="{% url 'update_sub' %}" method="POST">
+                    {% csrf_token %}
+                        <input type="hidden" value="{{price.id}}" name="price_id">
+                        <input type="hidden" value="{{sub.id}}" name="sub_id">
+                        <button class="btn btn-info w-100">Update</button>
+                    </form>
+                {% elif price.price_type == 'a' %}
+                    {% if sub.end_date <= timenow %}
+                    <form action="{% url 'reactivate_sub' %}" method="POST">
+                    {% csrf_token %}
+                        <input type="hidden" value="{{price.id}}" name="price_id">
+                        <input type="hidden" value="{{sub.id}}" name="sub_id">
+                        <button class="btn btn-info w-100">Reactivate
+                    </form>
+                    {% else %}
+                        <button class="btn btn-info w-100">Active</button>
+                    {% endif %}
+                {% else %}
+                <form action="{% url 'update_sub' %}" method="POST">
+                    {% csrf_token %}
+                        <input type="hidden" value="{{price.id}}" name="price_id">
+                        <input type="hidden" value="{{sub.id}}" name="sub_id">
+                        <button class="btn btn-info w-100">Change billing</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

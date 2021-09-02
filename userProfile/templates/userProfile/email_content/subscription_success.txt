@@ -1,0 +1,16 @@
+Hello, the achiever!!
+
+Congrats for activating the subscription {{service_name}} {{period}}
+
+Here is you invoice:
+
+{{service_name}} {{period}}  subscription _____________________ 1x
+
+Total _______________________________{{total}} GBP
+
+If it's your first time when activating a subscription for {{service_name}} you have 30 days freemium.
+To don't miss first payment add a payment method on profile page by pressing add card on the bottom of page.
+
+Thank you, from "The Achiever" team.
+
+Good luck!

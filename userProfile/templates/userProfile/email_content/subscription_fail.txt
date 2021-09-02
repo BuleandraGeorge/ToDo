@@ -1,0 +1,16 @@
+Hello, the achiever!!
+
+We hope you are all right.
+We send to you this email to let you know that subscription for "{{service_name}}" the payment couldn't be done.
+
+This can be due to:
+- the balance
+- the card details
+
+Checklist:
+- check the balance
+- add a new payment details on your profile page at Card by deleting the existing one and adding a new one.
+
+Thank you, form "The Achiever" team.
+
+Good luck!

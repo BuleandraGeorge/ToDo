@@ -1,0 +1,72 @@
+    if event_type == 'checkout.session.completed' or 'payment_intent.created':
+        meta_data = data_object['metadata']
+        profile_id = meta_data['profile_id']
+        service_id = meta_data['service_id']
+        price_id = meta_data['price_id']
+        mode = data_object['object']
+        if mode =="payment_intent":
+            sub_stripe_id=data_object['payment_intent']
+        else:
+            sub_stripe_id=data_object['subscription']
+
+        the_profile = get_object_or_404(profile, pk=profile_id)
+        the_service= get_object_or_404(service, pk=service_id)
+        the_price= get_object_or_404(price, pk=price_id)
+        new_subscription = subscription(
+            profile=the_profile,
+            service=the_service,
+            price=the_price,
+            stripe_id=sub_stripe_id
+            )
+        new_subscription.save()
+    elif event_type == 'invoice.paid' or "payment_intent.succeeded":
+        ### updates the subscription in the database
+        mode = data_object['object']
+        if mode =="payment_intent":
+            sub_stripe_id=data_object['payment_intent']
+        else:
+            sub_stripe_id=data_object['subscription']
+        the_sub=get_object_or_404(subscription,stripe_id=sub_stripe_id)
+        the_sub.set_availability()
+        subject="Subscription actualized with success"
+        body = render_to_string(
+                "userProfile/email_content/subscription_success.txt",
+                {
+                    'service_name':the_sub.service.name, 
+                    'total':the_sub.price.amount,
+                    'period':the_sub.price.get_price_type_display()
+                }
+            )
+        customer_email = data_object['customer_email']
+        DEFAULT_FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
+        send_mail(
+            subject,
+            body,
+            DEFAULT_FROM_EMAIL,
+            [customer_email]
+            )
+    elif event_type == 'invoice.payment_failed' or 'payment_intent.payment_failed':
+        mode = data_object['object']
+        if mode =="payment_intent":
+            sub_stripe_id=data_object['payment_intent']
+        else:
+            sub_stripe_id=data_object['subscription']
+        the_sub = get_object_or_404(subscription, stripe_id=sub_stripe_id)
+        the_sub.delete()
+        subject="We had some issues with the payment of the subscription"
+        body = render_to_string(
+                "userProfile/email_content/subscription_fail.txt",
+                {
+                    'service_name':the_sub.service.name, 
+                }
+            )
+        customer_email = data_object['customer_email']
+        DEFAULT_FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
+        send_mail(
+            subject,
+            body,
+            DEFAULT_FROM_EMAIL,
+            [customer_email]
+        )
+    else:
+      print('Unhandled event type {}'.format(event_type))

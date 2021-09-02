@@ -1,0 +1,137 @@
+{% extends 'base.html'%}
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2>My Subscriptions</h2>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                {% for a_sub in active_subscriptions %}
+                <div class="col-sm-12 col-lg-3">
+                    <div class="card border-0 bg-success"> 
+                        <div class="card-body pb-1">
+                            <h1 class="card-title">{{ a_sub.service.name }}</h1>
+                            <div class="row">
+                                <div class="col-5">
+                                    <strong>End Date</strong>
+                                </div>
+                                <div class="col-7">
+                                    {{ a_sub.end_date }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-5   ">
+                                    <strong>Type</strong>
+                                </div>
+                                <div class="col-7 mb-2">
+                                    {{ a_sub.price.get_price_type_display }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                {% if a_sub.end_date <= timenow %}
+                                    <p class="bg-info p-1 text-center text-dark rounded-1 ">Subscription expired</p>
+                                {% elif a_sub.price.price_type == "l" %}
+                                <p class="bg-info p-1 text-center text-dark rounded-1 ">Service bought</p>
+                                {% else %}
+                                    <div class="dropdown ">
+                                        <button class="btn btn-danger dropdown-toggle w-100" type="button" id="CancelButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                          Cancel
+                                        </button>
+                                        <ul class="dropdown-menu w-100 bg-success" aria-labelledby="CancelButton">
+                                          <li><a class="dropdown-item text-warning" href="{% url 'cancel_sub' sub_id=a_sub.stripe_id now=1 %}">Now</a></li>
+                                          <li><a class="dropdown-item text-warning" href="{% url 'cancel_sub' sub_id=a_sub.stripe_id  now=0 %}">At end date</a></li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                 <p>Have a try for one of the plans below</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2>Plans</h2>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                {% for service in services %}
+                {% for price in service.price_set.all%}
+                    <div class="col-3">
+                        <div class="card border-0 bg-success"> 
+                            <div class="card-body pb-1">
+                                <h1 class="card-title">{{service.name}}</h1>
+                                <div class="row">
+                                    <div class="col-12">{{service.description}}</div>
+                                    <div class="col-12 "><strong>Type</strong></div>        
+                                    <div class="col-12 ">{{ price.get_price_type_display }}</div>
+                                    <div class="col-12"><strong>Price</strong></div>
+                                    <div class="col-12 mb-2">{{ price.amount }}</div>
+                                    <div class="col-12">
+                                        {% include 'userProfile/includes/sub_button_logic.html'%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row my-5">
+        <div class="col-12">
+            <h2>Password update</h2>
+            <div class="card bg-success border-0 w-50">
+                <div class="card-body">
+                    <form method="POST" url="{% url 'profile' %}">
+                        {% csrf_token %}
+                            {{passForm.as_p}}
+                        <button class="btn btn-danger">Change Password</button>
+                    </form>
+                </div>
+            </div>         
+        </div>
+    </div>
+    <h2>Cards</h2>
+    {% for card in card_data %}
+    <div class="row mb-2">
+        <div class="col-4">
+            <div class="card bg-success mb-2">
+                <div class="card-body">
+                    <h3>{{card.card.brand}}</h3>
+                    <div class="row">
+                        <div class="col-6">
+                                <p class='card-text'>**** **** **** {{ card.card.last4}}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class='card-text'>
+                                EXP DATE: {{ card.card.exp_month}}/{{ card.card.exp_year}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="row">
+                <div class="col-12 mb-1 w-100">
+                    <a class="btn btn-danger" href="{% url 'delete_pm' id_pm=card.id  %}">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>You have no payment methods uploaded</p>
+    <p>That can make you to miss a payment of your subscriptions</p>
+    <a class="btn btn-info mb-5" href="{% url 'payment_details' %}">Add card</a>
+{% endfor %}
+</div>
+{% endblock  %}
