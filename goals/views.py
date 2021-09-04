@@ -6,6 +6,9 @@ from django.conf import settings
 from random import randint
 from django.http import HttpResponse
 from datetime import datetime, timedelta
+from django.views.generic import ListView
+
+
 def goals(request):
     active_services=request.session.get("active_services", [])
     if request.user.is_authenticated:
@@ -23,7 +26,6 @@ def goals(request):
         if not "Goals" in request.session.get("active_services", []):
             active_services.append('Goals')
             request.session['active_services']=active_services
-        print(request.session['active_services'])
         goals=request.session.get('goals', [])
         if not goals:
             return redirect(reverse('newUser'))
