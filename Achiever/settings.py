@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "stripe",
     'checkout',
     #rest-framework
-    'rest-framework',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

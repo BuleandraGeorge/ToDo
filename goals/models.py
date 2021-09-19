@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from userProfile.models import profile
+from django.contrib.auth.models import User
 
 
 class goal(models.Model):
@@ -8,7 +9,7 @@ class goal(models.Model):
     description=models.TextField(max_length=1000, null=False, blank=True)
     start_date=models.DateTimeField(default=timezone.now, null=False, blank=False)
     end_date=models.DateTimeField(default=timezone.now, null=False, blank=False)
-    owner = models.ForeignKey(profile, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.title
